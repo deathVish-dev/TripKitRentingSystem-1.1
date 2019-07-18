@@ -1,5 +1,8 @@
 package com.app.controller;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,13 +35,14 @@ public class LoginController {
 	}
 	
 	@PostMapping("/loginpage")
-	public String processLogin(String mail,String password) {
+	public String processLogin(String mail,String password,HttpSession session) {
 		System.out.println("in say process login\n"+mail+" "+password);
 		Login login=null;
 		login=dao.validate(mail,password);
 		System.out.println(login);
 		if(login!=null) 
 		{
+			session.setAttribute("loginuser", login);
 			msg="Enter Email and password";
 			String role=login.getRole();
 			if(role.equals("Admin"))
